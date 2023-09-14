@@ -45,7 +45,7 @@ export async function run(): Promise<void> {
     for (const branchToCheck of branches) {
       // Break if Rate Limit usage exceeds 95%
       const rateLimit = await getRateLimit()
-      if (rateLimit.used > 95) {
+      if (rateLimit.used > 90) {
         core.info(logRateLimitBreak(rateLimit))
         core.setFailed('Exiting to avoid rate limit violation.')
         break
