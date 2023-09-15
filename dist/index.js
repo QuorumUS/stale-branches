@@ -565,7 +565,7 @@ function getBranches() {
             }
             branches = [{ branchName: '', commmitSha: '' }];
         }
-        return branches.reverse();
+        return branches;
     });
 }
 exports.getBranches = getBranches;
@@ -1785,9 +1785,17 @@ function run() {
             if (validInputs.daysBeforeStale == null) {
                 throw new Error('Invalid inputs');
             }
+            const shuffle = (array) => {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            };
             //Collect Branches, Issue Budget, Existing Issues, & initialize lastCommitLogin
             const unfilteredBranches = yield (0, get_branches_1.getBranches)();
-            const branches = yield (0, filter_branches_1.filterBranches)(unfilteredBranches, validInputs.branchesFilterRegex);
+            const sortedBranches = yield (0, filter_branches_1.filterBranches)(unfilteredBranches, validInputs.branchesFilterRegex);
+            const branches = shuffle(sortedBranches);
             const outputTotal = branches.length;
             let existingIssue = yield (0, get_issues_1.getIssues)(validInputs.staleBranchLabel);
             let issueBudgetRemaining = yield (0, get_stale_issue_budget_1.getIssueBudget)(validInputs.maxIssues, validInputs.staleBranchLabel);

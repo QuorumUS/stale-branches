@@ -33,9 +33,19 @@ export async function run(): Promise<void> {
     if (validInputs.daysBeforeStale == null) {
       throw new Error('Invalid inputs')
     }
+    const shuffle = (array) => {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    };
+
     //Collect Branches, Issue Budget, Existing Issues, & initialize lastCommitLogin
     const unfilteredBranches = await getBranches()
-    const branches = await filterBranches(unfilteredBranches, validInputs.branchesFilterRegex)
+    const sortedBranches = await filterBranches(unfilteredBranches, validInputs.branchesFilterRegex)
+    const branches = shuffle(sortedBranches)
+
     const outputTotal = branches.length
     let existingIssue = await getIssues(validInputs.staleBranchLabel)
     let issueBudgetRemaining = await getIssueBudget(validInputs.maxIssues, validInputs.staleBranchLabel)
