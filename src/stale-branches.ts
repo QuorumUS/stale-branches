@@ -47,7 +47,7 @@ export async function run(): Promise<void> {
     const branches = shuffle(sortedBranches)
 
     const outputTotal = branches.length
-    let existingIssue = await getIssues(validInputs.staleBranchLabel)
+    let existingIssue = (await getIssues(validInputs.staleBranchLabel))
     let issueBudgetRemaining = await getIssueBudget(validInputs.maxIssues, validInputs.staleBranchLabel)
     let lastCommitLogin = 'Unknown'
 
@@ -136,6 +136,8 @@ export async function run(): Promise<void> {
 
       // Remove filteredIssue from existingIssue
       existingIssue = existingIssue.filter(branchIssue => branchIssue.issueTitle !== issueTitleString)
+      // Reverse existingIssue to process the oldest issues first
+      existingIssue = existingIssue.reverse()
 
       // Close output group for current branch assessment
       core.endGroup()

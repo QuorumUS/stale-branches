@@ -1797,7 +1797,7 @@ function run() {
             const sortedBranches = yield (0, filter_branches_1.filterBranches)(unfilteredBranches, validInputs.branchesFilterRegex);
             const branches = shuffle(sortedBranches);
             const outputTotal = branches.length;
-            let existingIssue = yield (0, get_issues_1.getIssues)(validInputs.staleBranchLabel);
+            let existingIssue = (yield (0, get_issues_1.getIssues)(validInputs.staleBranchLabel));
             let issueBudgetRemaining = yield (0, get_stale_issue_budget_1.getIssueBudget)(validInputs.maxIssues, validInputs.staleBranchLabel);
             let lastCommitLogin = 'Unknown';
             // Assess Branches
@@ -1866,6 +1866,8 @@ function run() {
                 }
                 // Remove filteredIssue from existingIssue
                 existingIssue = existingIssue.filter(branchIssue => branchIssue.issueTitle !== issueTitleString);
+                // Reverse existingIssue to process the oldest issues first
+                existingIssue = existingIssue.reverse();
                 // Close output group for current branch assessment
                 core.endGroup();
             }
