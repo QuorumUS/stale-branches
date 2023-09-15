@@ -34,5 +34,5 @@ export async function getBranches(): Promise<BranchResponse[]> {
     }
     branches = [{branchName: '', commmitSha: ''}]
   }
-  return branches.reverse()
+  return branches
 }
