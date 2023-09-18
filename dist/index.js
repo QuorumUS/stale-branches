@@ -1804,7 +1804,7 @@ function run() {
             for (const branchToCheck of branches) {
                 // Break if Rate Limit usage exceeds 95%
                 const rateLimit = yield (0, get_rate_limit_1.getRateLimit)();
-                if (rateLimit.used > 90) {
+                if (rateLimit.used > 95) {
                     core.info((0, log_rate_limit_break_1.logRateLimitBreak)(rateLimit));
                     core.setFailed('Exiting to avoid rate limit violation.');
                     break;
